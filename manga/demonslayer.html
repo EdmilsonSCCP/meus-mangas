@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>One Piece - Capítulos</title>
+  <title>Demon Slayer - Capítulos</title>
   <style>
     body {
       background-color: #fff;
@@ -121,17 +121,17 @@
   </div>
 
   <div class="chapters" id="chapters"></div>
-  <footer>EIICHIRO ODA AUTOR</footer>
+  <footer>KOYOHARU GOTOUGE AUTOR(A)</footer>
 
   <script>
-    const totalCapitulos = 113;
+    const totalCapitulos = 23;
     const container = document.getElementById('chapters');
 
     for (let i = 1; i <= totalCapitulos; i++) {
       const card = document.createElement('div');
       card.className = 'chapter-card';
       card.innerHTML = `
-        <img src="../assets/capas/onepiece/cap${i}.jpg" alt="Capítulo ${i}">
+        <img src="../assets/capas/demonslayer/cap${i}.jpg" alt="Capítulo ${i}">
         <h4>Capítulo ${i}</h4>
         <div class="checkbox-group">
           <label><input type="checkbox" class="lido-ed" data-id="${i}"> Lido Ed</label>
@@ -151,12 +151,11 @@
       document.getElementById('lidoLuPercent').innerText = `${((lidosLu / totalCapitulos) * 100).toFixed(2)}%`;
       document.getElementById('compradoPercent').innerText = `${((comprados / totalCapitulos) * 100).toFixed(2)}%`;
 
-      localStorage.setItem('onepiece_lido_ed', JSON.stringify([...document.querySelectorAll('.lido-ed')].map(c => c.checked)));
-      localStorage.setItem('onepiece_lido_lu', JSON.stringify([...document.querySelectorAll('.lido-lu')].map(c => c.checked)));
-      localStorage.setItem('onepiece_comprado', JSON.stringify([...document.querySelectorAll('.comprado')].map(c => c.checked)));
+      localStorage.setItem('demonslayer_lido_ed', JSON.stringify([...document.querySelectorAll('.lido-ed')].map(c => c.checked)));
+      localStorage.setItem('demonslayer_lido_lu', JSON.stringify([...document.querySelectorAll('.lido-lu')].map(c => c.checked)));
+      localStorage.setItem('demonslayer_comprado', JSON.stringify([...document.querySelectorAll('.comprado')].map(c => c.checked)));
     };
 
-    // Restaurar ao carregar
     window.onload = () => {
       fetch('../header.html')
         .then(res => res.text())
@@ -171,9 +170,9 @@
         });
 
       setTimeout(() => {
-        const ed = JSON.parse(localStorage.getItem('onepiece_lido_ed') || '[]');
-        const lu = JSON.parse(localStorage.getItem('onepiece_lido_lu') || '[]');
-        const comp = JSON.parse(localStorage.getItem('onepiece_comprado') || '[]');
+        const ed = JSON.parse(localStorage.getItem('demonslayer_lido_ed') || '[]');
+        const lu = JSON.parse(localStorage.getItem('demonslayer_lido_lu') || '[]');
+        const comp = JSON.parse(localStorage.getItem('demonslayer_comprado') || '[]');
 
         document.querySelectorAll('.lido-ed').forEach((c, i) => c.checked = !!ed[i]);
         document.querySelectorAll('.lido-lu').forEach((c, i) => c.checked = !!lu[i]);
