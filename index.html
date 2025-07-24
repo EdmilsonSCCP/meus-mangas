@@ -2,95 +2,146 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📚 Minha Coleção de Mangás</title>
-  <link rel="stylesheet" href="style/main.css">
+  <title>Minha Coleção de Mangás</title>
   <style>
     body {
-      margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f8f8f8;
-      color: #222;
+      margin: 0;
+      padding: 0;
+      background-color: #fdfdfd;
     }
 
-    h1 {
+    header {
+      background-color: #e97428;
+      color: white;
+      padding: 20px 0;
       text-align: center;
-      padding: 20px 16px 0;
-      font-size: 1.8rem;
+      font-size: 28px;
+      font-weight: bold;
     }
 
-    .search {
-      display: flex;
-      justify-content: center;
-      margin: 10px;
+    main {
+      padding: 30px 20px;
+      max-width: 1100px;
+      margin: auto;
     }
 
-    .search input {
-      padding: 10px;
-      font-size: 1rem;
-      width: 90%;
-      max-width: 400px;
+    h2 {
+      text-align: center;
+      font-size: 24px;
+      color: #111;
+      margin-bottom: 20px;
+    }
+
+    #search {
+      display: block;
+      margin: 0 auto 30px auto;
+      padding: 12px;
+      width: 280px;
+      font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 8px;
     }
 
-    .manga-grid {
+    #manga-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 16px;
-      padding: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 25px;
     }
 
-    .card {
+    .manga-card {
       background-color: white;
       border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 15px;
       text-align: center;
       transition: transform 0.2s;
+      cursor: pointer;
     }
 
-    .card:hover {
+    .manga-card:hover {
       transform: scale(1.02);
     }
 
-    .card img {
-      width: 100%;
-      height: auto;
-      display: block;
+    .manga-card img {
+      max-width: 100%;
+      height: 230px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
     }
 
-    .card h2 {
-      font-size: 1rem;
-      margin: 10px 0 4px;
+    .manga-card h3 {
+      margin: 10px 0 5px 0;
+      font-size: 18px;
+      color: #222;
     }
 
-    .card p {
-      font-size: 0.85rem;
+    .manga-card p {
       margin: 2px 0;
-    }
-
-    @media (max-width: 500px) {
-      h1 {
-        font-size: 1.5rem;
-      }
-      .card h2 {
-        font-size: 0.95rem;
-      }
-      .card p {
-        font-size: 0.8rem;
-      }
+      color: #555;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <h1>📚 Minha Coleção de Mangás</h1>
-  <div class="search">
-    <input type="text" placeholder="Buscar mangá..." id="search">
-  </div>
-  <div class="manga-grid" id="mangaList">
-    <!-- Cards dos mangás aqui -->
-  </div>
-  <script src="scripts/index.js"></script>
+  <header>
+    📚 Minha Coleção de Mangás
+  </header>
+  <main>
+    <input type="text" id="search" placeholder="Buscar mangá...">
+
+    <div id="manga-list">
+      <div class="manga-card" onclick="location.href='manga/onepiece.html'">
+        <img src="assets/capas/onepiece.jpg" alt="One Piece">
+        <h3>One Piece</h3>
+        <p><strong>Volumes:</strong> 107</p>
+        <p><strong>Autor:</strong> Eiichiro Oda</p>
+        <p><strong>Status:</strong> Em publicação</p>
+      </div>
+
+      <div class="manga-card">
+        <img src="assets/capas/naruto.jpg" alt="Naruto">
+        <h3>Naruto</h3>
+        <p><strong>Volumes:</strong> 72</p>
+        <p><strong>Autor:</strong> Masashi Kishimoto</p>
+        <p><strong>Status:</strong> Finalizado</p>
+      </div>
+
+      <div class="manga-card">
+        <img src="assets/capas/berserk.jpg" alt="Berserk">
+        <h3>Berserk</h3>
+        <p><strong>Volumes:</strong> 41</p>
+        <p><strong>Autor:</strong> Kentaro Miura</p>
+        <p><strong>Status:</strong> Em publicação</p>
+      </div>
+
+      <div class="manga-card">
+        <img src="assets/capas/dragonball.jpg" alt="Dragon Ball">
+        <h3>Dragon Ball</h3>
+        <p><strong>Volumes:</strong> 42</p>
+        <p><strong>Autor:</strong> Akira Toriyama</p>
+        <p><strong>Status:</strong> Finalizado</p>
+      </div>
+
+      <div class="manga-card">
+        <img src="assets/capas/chainsawman.jpg" alt="Chainsaw Man">
+        <h3>Chainsaw Man</h3>
+        <p><strong>Volumes:</strong> 15</p>
+        <p><strong>Autor:</strong> Tatsuki Fujimoto</p>
+        <p><strong>Status:</strong> Em publicação</p>
+      </div>
+    </div>
+  </main>
+  <script>
+    const input = document.getElementById('search');
+    input.addEventListener('input', () => {
+      const query = input.value.toLowerCase();
+      document.querySelectorAll('.manga-card').forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        card.style.display = title.includes(query) ? 'block' : 'none';
+      });
+    });
+  </script>
 </body>
 </html>
