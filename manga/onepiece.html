@@ -1,1 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>One Piece - Capítulos</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .progress-bar {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+    .progress {
+      width: 200px;
+    }
+    .progress label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .progress input {
+      width: 100%;
+    }
+    .chapters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .chapter-card {
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 0 10px #000;
+    }
+    .chapter-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+    .checkbox-group {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .checkbox-group label {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>One Piece - Capítulos</h1>
+  <div class="progress-bar">
+    <div class="progress">
+      <label>Lidos: <span id="lidoPercent">0%</span></label>
+      <progress id="lidoProgress" value="0" max="113"></progress>
+    </div>
+    <div class="progress">
+      <label>Comprados: <span id="compradoPercent">0%</span></label>
+      <progress id="compradoProgress" value="0" max="113"></progress>
+    </div>
+  </div>
+  <div class="chapters" id="chapters"></div>
+
+  <script>
+    const totalCapitulos = 113;
+    const container = document.getElementById('chapters');
+
+    let lidos = 0;
+    let comprados = 0;
+
+    for (let i = 1; i <= totalCapitulos; i++) {
+      const chapter = document.createElement('div');
+      chapter.className = 'chapter-card';
+
+      const img = `<img src="../assets/capas/onepiece/cap${i}.jpg" alt="Capítulo ${i}">`;
+      const title = `<h3>Capítulo ${i}</h3>`;
+
+      const checkboxGroup = `
+        <div class="checkbox-group">
+          <label><input type="checkbox" class="lido" data-id="${i}"> Lido</label>
+          <label><input type="checkbox" class="comprado" data-id="${i}"> Comprado</label>
+        </div>
+      `;
+
+      chapter.innerHTML = img + title + checkboxGroup;
+      container.appendChild(chapter);
+    }
+
+    const updateProgress = () => {
+      const lidosChecks = document.querySelectorAll('.lido');
+      const compradosChecks = document.querySelectorAll('.comprado');
+      
+      lidos = [...lidosChecks].filter(c => c.checked).length;
+      comprados = [...compradosChecks].filter(c => c.checked).length;
+
+      document.getElementById('lidoProgress').value = lidos;
+      document.getElementById('compradoProgress').value = comprados;
+
+      document.getElementById('lidoPercent').innerText = `${Math.round((lidos / totalCapitulos) * 100)}%`;
+      document.getElementById('compradoPercent').innerText = `${Math.round((comprados / totalCapitulos) * 100)}%`;
+
+      localStorage.setItem('onepiece_lidos', JSON.stringify([...lidosChecks].map(c => c.checked)));
+      localStorage.setItem('onepiece_comprados', JSON.stringify([...compradosChecks].map(c => c.checked)));
+    };
+
+    document.addEventListener('change', updateProgress);
+
+    // Carregar estado salvo
+    window.onload = () => {
+      const lidosSalvos = JSON.parse(localStorage.getItem('onepiece_lidos') || '[]');
+      const compradosSalvos = JSON.parse(localStorage.getItem('onepiece_comprados') || '[]');
+
+      document.querySelectorAll('.lido').forEach((c, i) => c.checked = !!lidosSalvos[i]);
+      document.querySelectorAll('.comprado').forEach((c, i) => c.checked = !!compradosSalvos[i]);
+
+      updateProgress();
+    };
+  </script>
+</body>
+</html>
 
