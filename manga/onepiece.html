@@ -12,7 +12,7 @@
       padding: 0;
     }
 
-    .site-header {
+    header {
       background-color: #000;
       padding: 10px 20px;
       display: flex;
@@ -21,13 +21,13 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.4);
     }
 
-    .site-header .logo {
+    header img.logo {
       height: 60px;
       transition: transform 0.2s ease;
       cursor: pointer;
     }
 
-    .site-header .logo:hover {
+    header img.logo:hover {
       transform: scale(1.05);
     }
 
@@ -110,8 +110,12 @@
 </head>
 <body>
 
-  <!-- Cabeçalho compartilhado -->
-  <div id="header-container"></div>
+  <!-- Cabeçalho direto -->
+  <header>
+    <a href="../index.html">
+      <img src="../assets/logo_corinthians.jpg" alt="Logo Corinthians - Voltar para Home" class="logo">
+    </a>
+  </header>
 
   <h2>Capítulos Disponíveis</h2>
   <div class="progress-bar">
@@ -158,13 +162,6 @@
       document.querySelectorAll('.lido').forEach((c, i) => c.checked = !!lidosSalvos[i]);
       document.querySelectorAll('.comprado').forEach((c, i) => c.checked = !!compradosSalvos[i]);
       updateProgress();
-
-      // Carrega o cabeçalho
-      fetch('../header.html')
-        .then(res => res.text())
-        .then(data => {
-          document.getElementById('header-container').innerHTML = data;
-        });
     };
   </script>
 </body>
