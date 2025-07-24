@@ -21,8 +21,8 @@ body {
 .site-header .logo {
   position: absolute;
   bottom: -60px; /* Faz "vazar" para fora */
-  height: 100px;
-  z-index: 2;
+  height: 150px;
+  z-index: 20;
   transition: transform 0.2s ease;
   cursor: pointer;
 }
