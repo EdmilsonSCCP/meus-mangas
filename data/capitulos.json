@@ -1,0 +1,22 @@
+{
+  "One Piece": [
+    {"numero": 1, "titulo": "Romance Dawn"},
+    {"numero": 2, "titulo": "O Homem que Virá"}
+  ],
+  "Naruto": [
+    {"numero": 1, "titulo": "Uzumaki Naruto!"},
+    {"numero": 2, "titulo": "Konohamaru"}
+  ],
+  "Berserk": [
+    {"numero": 1, "titulo": "O Espadachim Negro"},
+    {"numero": 2, "titulo": "Marca do Mal"}
+  ],
+  "Dragon Ball": [
+    {"numero": 1, "titulo": "O Segredo das Esferas"},
+    {"numero": 2, "titulo": "A Menina Bulma"}
+  ],
+  "Chainsaw Man": [
+    {"numero": 1, "titulo": "Cao e Motosserra"},
+    {"numero": 2, "titulo": "Pochita"}
+  ]
+}
