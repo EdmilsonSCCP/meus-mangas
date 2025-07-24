@@ -9,6 +9,7 @@
       margin: 0;
       padding: 0;
       background-color: #fdfdfd;
+      color: #222;
     }
 
     .site-header {
@@ -36,13 +37,6 @@
       margin: auto;
     }
 
-    h2 {
-      text-align: center;
-      font-size: 24px;
-      color: #111;
-      margin-bottom: 20px;
-    }
-
     #search {
       display: block;
       margin: 0 auto 30px auto;
@@ -55,8 +49,9 @@
 
     #manga-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 25px;
+      margin-top: 20px;
     }
 
     .manga-card {
@@ -75,7 +70,7 @@
 
     .manga-card img {
       max-width: 100%;
-      height: 230px;
+      height: 200px;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 10px;
@@ -96,13 +91,14 @@
 </head>
 <body>
 
-  <!-- Header externo (reutilizável) -->
+  <!-- Cabeçalho externo reutilizável -->
   <div id="header-container"></div>
 
   <main>
     <input type="text" id="search" placeholder="Buscar mangá...">
 
     <div id="manga-list">
+      <!-- ONE PIECE -->
       <div class="manga-card" onclick="location.href='manga/onepiece.html'">
         <img src="assets/capas/onepiece.jpg" alt="One Piece">
         <h3>One Piece</h3>
@@ -111,8 +107,8 @@
         <p><strong>Status:</strong> Em publicação</p>
       </div>
 
-      <div class="manga-card">
-        <div class="manga-card" onclick="location.href='manga/naruto.html'">
+      <!-- NARUTO -->
+      <div class="manga-card" onclick="location.href='manga/naruto.html'">
         <img src="assets/capas/naruto.jpg" alt="Naruto">
         <h3>Naruto</h3>
         <p><strong>Volumes:</strong> 72</p>
@@ -120,8 +116,8 @@
         <p><strong>Status:</strong> Finalizado</p>
       </div>
 
-      <div class="manga-card">
-        <div class="manga-card" onclick="location.href='manga/berserk.html'">
+      <!-- BERSERK -->
+      <div class="manga-card" onclick="location.href='manga/berserk.html'">
         <img src="assets/capas/berserk.jpg" alt="Berserk">
         <h3>Berserk</h3>
         <p><strong>Volumes:</strong> 41</p>
@@ -129,8 +125,8 @@
         <p><strong>Status:</strong> Em publicação</p>
       </div>
 
-      <div class="manga-card">
-        <div class="manga-card" onclick="location.href='manga/demonslayer.html'">
+      <!-- DEMON SLAYER -->
+      <div class="manga-card" onclick="location.href='manga/demonslayer.html'">
         <img src="assets/capas/demonslayer.jpg" alt="Demon Slayer">
         <h3>Demon Slayer</h3>
         <p><strong>Volumes:</strong> 23</p>
@@ -138,8 +134,8 @@
         <p><strong>Status:</strong> Finalizado</p>
       </div>
 
-      <div class="manga-card">
-        <div class="manga-card" onclick="location.href='manga/fullmetal.html'">
+      <!-- FULLMETAL ALCHEMIST -->
+      <div class="manga-card" onclick="location.href='manga/fullmetal.html'">
         <img src="assets/capas/fullmetal.jpg" alt="Fullmetal Alchemist">
         <h3>Fullmetal Alchemist</h3>
         <p><strong>Volumes:</strong> 27</p>
@@ -147,8 +143,8 @@
         <p><strong>Status:</strong> Finalizado</p>
       </div>
 
-      <div class="manga-card">
-        <div class="manga-card" onclick="location.href='manga/nana.html'">
+      <!-- NANA -->
+      <div class="manga-card" onclick="location.href='manga/nana.html'">
         <img src="assets/capas/nana.jpg" alt="Nana">
         <h3>Nana</h3>
         <p><strong>Volumes:</strong> 21</p>
@@ -169,7 +165,7 @@
       });
     });
 
-    // Carregamento do header.html
+    // Carrega o cabeçalho
     window.onload = () => {
       fetch('header.html')
         .then(res => res.text())
