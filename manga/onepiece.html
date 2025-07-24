@@ -41,7 +41,7 @@
     .progress-bar {
       display: flex;
       justify-content: center;
-      gap: 50px;
+      gap: 40px;
       margin: 10px 0 30px 0;
       font-weight: bold;
       font-size: 14px;
@@ -84,16 +84,17 @@
 
     .checkbox-group {
       display: flex;
-      justify-content: center;
-      gap: 12px;
+      flex-direction: column;
+      gap: 6px;
       margin-top: 10px;
       font-size: 14px;
+      align-items: flex-start;
     }
 
     .checkbox-group label {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
     }
 
     .checkbox-group input[type="checkbox"] {
@@ -110,45 +111,19 @@
 </head>
 <body>
 
-  <!-- Header reutilizável -->
   <div id="header-container"></div>
 
   <h2>Capítulos Disponíveis</h2>
   <div class="progress-bar">
-    <div>Lidos: <span id="lidoPercent">0.00%</span></div>
+    <div>Lidos Ed: <span id="lidoEdPercent">0.00%</span></div>
+    <div>Lidos Lu: <span id="lidoLuPercent">0.00%</span></div>
     <div>Comprado: <span id="compradoPercent">0.00%</span></div>
   </div>
+
   <div class="chapters" id="chapters"></div>
   <footer>EIICHIRO ODA AUTOR</footer>
 
   <script>
-    // Carrega o header
-    window.onload = () => {
-      fetch('../header.html')
-        .then(res => res.text())
-        .then(data => {
-          document.getElementById('header-container').innerHTML = data;
-
-          // Atualiza o link do logo para voltar à home corretamente a partir da subpasta
-          const logo = document.querySelector('#header-container img.logo');
-          const link = document.querySelector('#header-container a.logo-link');
-          if (logo && link) {
-            logo.src = '../assets/logo_corinthians.png';
-            link.href = '../index.html';
-          }
-        });
-
-      // Restaura checkboxes do localStorage
-      const lidosSalvos = JSON.parse(localStorage.getItem('onepiece_lidos') || '[]');
-      const compradosSalvos = JSON.parse(localStorage.getItem('onepiece_comprados') || '[]');
-
-      setTimeout(() => {
-        document.querySelectorAll('.lido').forEach((c, i) => c.checked = !!lidosSalvos[i]);
-        document.querySelectorAll('.comprado').forEach((c, i) => c.checked = !!compradosSalvos[i]);
-        updateProgress();
-      }, 50);
-    };
-
     const totalCapitulos = 113;
     const container = document.getElementById('chapters');
 
@@ -159,7 +134,8 @@
         <img src="../assets/capas/onepiece/cap${i}.jpg" alt="Capítulo ${i}">
         <h4>Capítulo ${i}</h4>
         <div class="checkbox-group">
-          <label><input type="checkbox" class="lido" data-id="${i}"> Lido</label>
+          <label><input type="checkbox" class="lido-ed" data-id="${i}"> Lido Ed</label>
+          <label><input type="checkbox" class="lido-lu" data-id="${i}"> Lido Lu</label>
           <label><input type="checkbox" class="comprado" data-id="${i}"> Comprado</label>
         </div>
       `;
@@ -167,13 +143,44 @@
     }
 
     const updateProgress = () => {
-      const lidos = document.querySelectorAll('.lido:checked').length;
+      const lidosEd = document.querySelectorAll('.lido-ed:checked').length;
+      const lidosLu = document.querySelectorAll('.lido-lu:checked').length;
       const comprados = document.querySelectorAll('.comprado:checked').length;
-      document.getElementById('lidoPercent').innerText = `${((lidos / totalCapitulos) * 100).toFixed(2)}%`;
+
+      document.getElementById('lidoEdPercent').innerText = `${((lidosEd / totalCapitulos) * 100).toFixed(2)}%`;
+      document.getElementById('lidoLuPercent').innerText = `${((lidosLu / totalCapitulos) * 100).toFixed(2)}%`;
       document.getElementById('compradoPercent').innerText = `${((comprados / totalCapitulos) * 100).toFixed(2)}%`;
 
-      localStorage.setItem('onepiece_lidos', JSON.stringify([...document.querySelectorAll('.lido')].map(c => c.checked)));
-      localStorage.setItem('onepiece_comprados', JSON.stringify([...document.querySelectorAll('.comprado')].map(c => c.checked)));
+      localStorage.setItem('onepiece_lido_ed', JSON.stringify([...document.querySelectorAll('.lido-ed')].map(c => c.checked)));
+      localStorage.setItem('onepiece_lido_lu', JSON.stringify([...document.querySelectorAll('.lido-lu')].map(c => c.checked)));
+      localStorage.setItem('onepiece_comprado', JSON.stringify([...document.querySelectorAll('.comprado')].map(c => c.checked)));
+    };
+
+    // Restaurar ao carregar
+    window.onload = () => {
+      fetch('../header.html')
+        .then(res => res.text())
+        .then(data => {
+          document.getElementById('header-container').innerHTML = data;
+          const logo = document.querySelector('#header-container img.logo');
+          const link = document.querySelector('#header-container a.logo-link');
+          if (logo && link) {
+            logo.src = '../assets/logo_corinthians.png';
+            link.href = '../index.html';
+          }
+        });
+
+      setTimeout(() => {
+        const ed = JSON.parse(localStorage.getItem('onepiece_lido_ed') || '[]');
+        const lu = JSON.parse(localStorage.getItem('onepiece_lido_lu') || '[]');
+        const comp = JSON.parse(localStorage.getItem('onepiece_comprado') || '[]');
+
+        document.querySelectorAll('.lido-ed').forEach((c, i) => c.checked = !!ed[i]);
+        document.querySelectorAll('.lido-lu').forEach((c, i) => c.checked = !!lu[i]);
+        document.querySelectorAll('.comprado').forEach((c, i) => c.checked = !!comp[i]);
+
+        updateProgress();
+      }, 100);
     };
 
     document.addEventListener('change', updateProgress);
