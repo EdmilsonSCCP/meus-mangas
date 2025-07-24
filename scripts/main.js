@@ -15,22 +15,21 @@ fetch('data/mangas.json')
     function render(lista) {
       container.innerHTML = '';
       lista.forEach(m => {
-        const link = `manga/${slugify(m.nome)}.html`;
+        const cardLink = document.createElement('a');
+        cardLink.href = `manga/${slugify(m.nome)}.html`;
+        cardLink.className = 'manga-card';
+        cardLink.style.textDecoration = 'none';
+        cardLink.style.color = 'inherit';
 
-        const card = document.createElement('div');
-        card.className = 'manga-card';
-
-        card.innerHTML = `
-          <a href="${link}" style="text-decoration: none; color: inherit;">
-            <img src="assets/capas/${m.imagem}" alt="${m.nome}" />
-            <h3>${m.nome}</h3>
-            <p><strong>Volumes:</strong> ${m.volumes}</p>
-            <p><strong>Autor:</strong> ${m.autor}</p>
-            <p><strong>Status:</strong> ${m.status}</p>
-          </a>
+        cardLink.innerHTML = `
+          <img src="assets/capas/${m.imagem}" alt="${m.nome}" />
+          <h3>${m.nome}</h3>
+          <p><strong>Volumes:</strong> ${m.volumes}</p>
+          <p><strong>Autor:</strong> ${m.autor}</p>
+          <p><strong>Status:</strong> ${m.status}</p>
         `;
 
-        container.appendChild(card);
+        container.appendChild(cardLink);
       });
     }
 
