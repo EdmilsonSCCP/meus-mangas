@@ -106,21 +106,25 @@
     }
 
     const updateProgress = () => {
-      const lidosChecks = document.querySelectorAll('.lido');
-      const compradosChecks = document.querySelectorAll('.comprado');
-      
-      lidos = [...lidosChecks].filter(c => c.checked).length;
-      comprados = [...compradosChecks].filter(c => c.checked).length;
+  const lidosChecks = document.querySelectorAll('.lido');
+  const compradosChecks = document.querySelectorAll('.comprado');
+  
+  lidos = [...lidosChecks].filter(c => c.checked).length;
+  comprados = [...compradosChecks].filter(c => c.checked).length;
 
-      document.getElementById('lidoProgress').value = lidos;
-      document.getElementById('compradoProgress').value = comprados;
+  document.getElementById('lidoProgress').value = lidos;
+  document.getElementById('compradoProgress').value = comprados;
 
-      document.getElementById('lidoPercent').innerText = `${Math.round((lidos / totalCapitulos) * 100)}%`;
-      document.getElementById('compradoPercent').innerText = `${Math.round((comprados / totalCapitulos) * 100)}%`;
+  const lidoPercent = ((lidos / totalCapitulos) * 100).toFixed(2);
+  const compradoPercent = ((comprados / totalCapitulos) * 100).toFixed(2);
 
-      localStorage.setItem('onepiece_lidos', JSON.stringify([...lidosChecks].map(c => c.checked)));
-      localStorage.setItem('onepiece_comprados', JSON.stringify([...compradosChecks].map(c => c.checked)));
-    };
+  document.getElementById('lidoPercent').innerText = `${lidoPercent}%`;
+  document.getElementById('compradoPercent').innerText = `${compradoPercent}%`;
+
+  localStorage.setItem('onepiece_lidos', JSON.stringify([...lidosChecks].map(c => c.checked)));
+  localStorage.setItem('onepiece_comprados', JSON.stringify([...compradosChecks].map(c => c.checked)));
+};
+
 
     document.addEventListener('change', updateProgress);
 
