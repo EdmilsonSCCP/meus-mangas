@@ -1,1 +1,38 @@
+[
+  {
+    "nome": "One Piece",
+    "volumes": 107,
+    "autor": "Eiichiro Oda",
+    "status": "Em publicação",
+    "imagem": "onepiece.jpg"
+  },
+  {
+    "nome": "Naruto",
+    "volumes": 72,
+    "autor": "Masashi Kishimoto",
+    "status": "Finalizado",
+    "imagem": "naruto.jpg"
+  },
+  {
+    "nome": "Berserk",
+    "volumes": 41,
+    "autor": "Kentaro Miura",
+    "status": "Em publicação",
+    "imagem": "berserk.jpg"
+  },
+  {
+    "nome": "Dragon Ball",
+    "volumes": 42,
+    "autor": "Akira Toriyama",
+    "status": "Finalizado",
+    "imagem": "dragonball.jpg"
+  },
+  {
+    "nome": "Chainsaw Man",
+    "volumes": 15,
+    "autor": "Tatsuki Fujimoto",
+    "status": "Em publicação",
+    "imagem": "chainsawman.jpg"
+  }
+]
 
