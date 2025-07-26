@@ -1,8 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <title>Minha Coleção de Mangás</title>
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-77BTJKMDJJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-77BTJKMDJJ');
+  </script>
+
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -89,126 +97,4 @@
     }
   </style>
 </head>
-<body>
 
-  <!-- Cabeçalho externo reutilizável -->
-  <div id="header-container"></div>
-
-  <main>
-    <input type="text" id="search" placeholder="Buscar mangá...">
-
-    <div id="manga-list">
-      <!-- ONE PIECE -->
-      <div class="manga-card" onclick="location.href='manga/onepiece.html'">
-        <img src="assets/capas/onepiece.jpg" alt="One Piece">
-        <h3>One Piece</h3>
-        <p><strong>Volumes:</strong> 113</p>
-        <p><strong>Autor:</strong> Eiichiro Oda</p>
-        <p><strong>Status:</strong> Em publicação</p>
-      </div>
-
-      <!-- Love Hina -->
-      <div class="manga-card" onclick="location.href='manga/lovehina.html'">
-        <img src="assets/capas/lovehina.jpg" alt="Love Hina">
-        <h3>Love Hina</h3>
-        <p><strong>Volumes:</strong> 28</p>
-        <p><strong>Autor:</strong> Ken Akamatsu</p>
-        <p><strong>Status:</strong> Finalizado</p>
-      </div>
-
-      <!-- NARUTO -->
-      <div class="manga-card" onclick="location.href='manga/naruto.html'">
-        <img src="assets/capas/naruto.jpg" alt="Naruto">
-        <h3>Naruto</h3>
-        <p><strong>Volumes:</strong> 72</p>
-        <p><strong>Autor:</strong> Masashi Kishimoto</p>
-        <p><strong>Status:</strong> Finalizado</p>
-      </div>
-
-      <!-- BERSERK -->
-      <div class="manga-card" onclick="location.href='manga/berserk.html'">
-        <img src="assets/capas/berserk.jpg" alt="Berserk">
-        <h3>Berserk</h3>
-        <p><strong>Volumes:</strong> 41</p>
-        <p><strong>Autor:</strong> Kentaro Miura</p>
-        <p><strong>Status:</strong> Em publicação</p>
-      </div>
-
-      <!-- SOLANIN -->
-      <div class="manga-card" onclick="location.href='manga/solanin.html'">
-        <img src="assets/capas/solanin.jpg" alt="Solanin">
-        <h3>Solanin</h3>
-        <p><strong>Volumes:</strong> 02</p>
-        <p><strong>Autor:</strong> Inio Asano</p>
-        <p><strong>Status:</strong> Finalizado</p>
-      </div>
-
-      <!-- CHOBITS -->
-      <div class="manga-card" onclick="location.href='manga/chobits.html'">
-        <img src="assets/capas/chobits.jpg" alt="Chobits">
-        <h3>Chobits</h3>
-        <p><strong>Volumes:</strong> 16</p>
-        <p><strong>Autor:</strong> Clamp</p>
-        <p><strong>Status:</strong> Finalizado</p>
-      </div>
-
-      <!-- ANGELIC LAYER -->
-      <div class="manga-card" onclick="location.href='manga/angeliclayer.html'">
-        <img src="assets/capas/angeliclayer.jpg" alt="Angelic Layer">
-        <h3>Angelic Layer</h3>
-        <p><strong>Volumes:</strong> 05</p>
-        <p><strong>Autor:</strong> Clamp</p>
-        <p><strong>Status:</strong> Finalizado</p>
-      </div>
-
-      <!-- DEMON SLAYER -->
-      <div class="manga-card" onclick="location.href='manga/demonslayer.html'">
-        <img src="assets/capas/demonslayer.jpg" alt="Demon Slayer">
-        <h3>Demon Slayer</h3>
-        <p><strong>Volumes:</strong> 23</p>
-        <p><strong>Autor:</strong> Koyoharu Gotouge</p>
-        <p><strong>Status:</strong> Finalizado</p>
-      </div>
-
-      <!-- FULLMETAL ALCHEMIST -->
-      <div class="manga-card" onclick="location.href='manga/fullmetal.html'">
-        <img src="assets/capas/fullmetal.jpg" alt="Fullmetal Alchemist">
-        <h3>Fullmetal Alchemist</h3>
-        <p><strong>Volumes:</strong> 27</p>
-        <p><strong>Autor:</strong> Hiromu Arakawa</p>
-        <p><strong>Status:</strong> Finalizado</p>
-      </div>
-
-      <!-- NANA -->
-      <div class="manga-card" onclick="location.href='manga/nana.html'">
-        <img src="assets/capas/nana.jpg" alt="Nana">
-        <h3>Nana</h3>
-        <p><strong>Volumes:</strong> 21</p>
-        <p><strong>Autor:</strong> Ai Yazawa</p>
-        <p><strong>Status:</strong> Em pausa</p>
-      </div>
-    </div>
-  </main>
-
-  <script>
-    // Filtro de busca
-    const input = document.getElementById('search');
-    input.addEventListener('input', () => {
-      const query = input.value.toLowerCase();
-      document.querySelectorAll('.manga-card').forEach(card => {
-        const title = card.querySelector('h3').textContent.toLowerCase();
-        card.style.display = title.includes(query) ? 'block' : 'none';
-      });
-    });
-
-    // Carrega o cabeçalho
-    window.onload = () => {
-      fetch('header.html')
-        .then(res => res.text())
-        .then(data => {
-          document.getElementById('header-container').innerHTML = data;
-        });
-    };
-  </script>
-</body>
-</html>
