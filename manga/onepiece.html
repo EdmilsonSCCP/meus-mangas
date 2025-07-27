@@ -12,25 +12,6 @@
       padding: 0;
     }
 
-    .site-header {
-      background-color: #000;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-    }
-
-    .site-header img.logo {
-      height: 80px;
-      transition: transform 0.2s ease;
-      cursor: pointer;
-    }
-
-    .site-header img.logo:hover {
-      transform: scale(1.05);
-    }
-
     h2 {
       text-align: center;
       margin-top: 20px;
@@ -102,6 +83,26 @@
       cursor: pointer;
     }
 
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 30px 0;
+    }
+
+    .pagination button {
+      padding: 8px 14px;
+      border: none;
+      background-color: #000;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .pagination button.active {
+      background-color: #444;
+    }
+
     footer {
       text-align: center;
       margin: 30px 0;
@@ -111,79 +112,126 @@
 </head>
 <body>
 
-  <div id="header-container"></div>
+  <div style="text-align: center; margin-top: 20px;">
+  <a href="../index.html" style="
+    display: inline-block;
+    background-color: #000;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  " onmouseover="this.style.backgroundColor='#333'" onmouseout="this.style.backgroundColor='#000'">
+    ⬅️ Home
+  </a>
+</div>
 
   <h2>Capítulos Disponíveis</h2>
+
   <div class="progress-bar">
     <div>Lidos Ed: <span id="lidoEdPercent">0.00%</span></div>
-    <div>Lidos Lu: <span id="lidoLuPercent">0.00%</span></div>
+    <div>Lidos Ju: <span id="lidoJuPercent">0.00%</span></div>
     <div>Comprado: <span id="compradoPercent">0.00%</span></div>
   </div>
 
   <div class="chapters" id="chapters"></div>
+  <div class="pagination" id="pagination"></div>
+
   <footer>EIICHIRO ODA AUTOR</footer>
 
   <script>
     const totalCapitulos = 113;
-    const container = document.getElementById('chapters');
+    const porPagina = 20;
+    let paginaAtual = 1;
 
-    for (let i = 1; i <= totalCapitulos; i++) {
-      const card = document.createElement('div');
-      card.className = 'chapter-card';
-      card.innerHTML = `
-        <img src="../assets/capas/onepiece/cap${i}.jpg" alt="Capítulo ${i}">
-        <h4>Capítulo ${i}</h4>
-        <div class="checkbox-group">
-          <label><input type="checkbox" class="lido-ed" data-id="${i}"> Lido Ed</label>
-          <label><input type="checkbox" class="lido-lu" data-id="${i}"> Lido Lu</label>
-          <label><input type="checkbox" class="comprado" data-id="${i}"> Comprado</label>
-        </div>
-      `;
-      container.appendChild(card);
+    function renderPagina(pagina) {
+      const container = document.getElementById('chapters');
+      container.innerHTML = '';
+
+      const inicio = (pagina - 1) * porPagina + 1;
+      const fim = Math.min(inicio + porPagina - 1, totalCapitulos);
+
+      for (let i = inicio; i <= fim; i++) {
+        const card = document.createElement('div');
+        card.className = 'chapter-card';
+        card.innerHTML = `
+          <img src="../assets/capas/onepiece/cap${i}.jpg" alt="Capítulo ${i}">
+          <h4>Capítulo ${i}</h4>
+          <div class="checkbox-group">
+            <label><input type="checkbox" class="lido-ed" data-id="${i}"> Lido Ed</label>
+            <label><input type="checkbox" class="lido-Ju" data-id="${i}"> Lido Ju</label>
+            <label><input type="checkbox" class="comprado" data-id="${i}"> Comprado</label>
+          </div>
+        `;
+        container.appendChild(card);
+      }
+
+      restoreCheckboxes();
+      updateProgress();
+      renderPaginacao();
     }
 
-    const updateProgress = () => {
-      const lidosEd = document.querySelectorAll('.lido-ed:checked').length;
-      const lidosLu = document.querySelectorAll('.lido-lu:checked').length;
-      const comprados = document.querySelectorAll('.comprado:checked').length;
+    function renderPaginacao() {
+      const paginacao = document.getElementById('pagination');
+      paginacao.innerHTML = '';
+      const totalPaginas = Math.ceil(totalCapitulos / porPagina);
 
-      document.getElementById('lidoEdPercent').innerText = `${((lidosEd / totalCapitulos) * 100).toFixed(2)}%`;
-      document.getElementById('lidoLuPercent').innerText = `${((lidosLu / totalCapitulos) * 100).toFixed(2)}%`;
-      document.getElementById('compradoPercent').innerText = `${((comprados / totalCapitulos) * 100).toFixed(2)}%`;
+      for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement('button');
+        btn.innerText = i;
+        if (i === paginaAtual) btn.classList.add('active');
+        btn.onclick = () => {
+          paginaAtual = i;
+          renderPagina(paginaAtual);
+        };
+        paginacao.appendChild(btn);
+      }
+    }
 
-      localStorage.setItem('onepiece_lido_ed', JSON.stringify([...document.querySelectorAll('.lido-ed')].map(c => c.checked)));
-      localStorage.setItem('onepiece_lido_lu', JSON.stringify([...document.querySelectorAll('.lido-lu')].map(c => c.checked)));
-      localStorage.setItem('onepiece_comprado', JSON.stringify([...document.querySelectorAll('.comprado')].map(c => c.checked)));
-    };
+    function updateProgress() {
+      const total = totalCapitulos;
+      let ed = JSON.parse(localStorage.getItem('onepiece_lido_ed') || '[]');
+      let Ju = JSON.parse(localStorage.getItem('onepiece_lido_ju') || '[]');
+      let comp = JSON.parse(localStorage.getItem('onepiece_comprado') || '[]');
 
-    // Restaurar ao carregar
+      document.getElementById('lidoEdPercent').innerText = `${((ed.filter(Boolean).length / total) * 100).toFixed(2)}%`;
+      document.getElementById('lidoJuPercent').innerText = `${((Ju.filter(Boolean).length / total) * 100).toFixed(2)}%`;
+      document.getElementById('compradoPercent').innerText = `${((comp.filter(Boolean).length / total) * 100).toFixed(2)}%`;
+    }
+
+    function restoreCheckboxes() {
+      let ed = JSON.parse(localStorage.getItem('onepiece_lido_ed') || '[]');
+      let Ju = JSON.parse(localStorage.getItem('onepiece_lido_ju') || '[]');
+      let comp = JSON.parse(localStorage.getItem('onepiece_comprado') || '[]');
+
+      document.querySelectorAll('.lido-ed').forEach(el => el.checked = !!ed[el.dataset.id - 1]);
+      document.querySelectorAll('.lido-Ju').forEach(el => el.checked = !!Ju[el.dataset.id - 1]);
+      document.querySelectorAll('.comprado').forEach(el => el.checked = !!comp[el.dataset.id - 1]);
+    }
+
+    function saveCheckboxes() {
+      let ed = JSON.parse(localStorage.getItem('onepiece_lido_ed') || '[]');
+      let Ju = JSON.parse(localStorage.getItem('onepiece_lido_ju') || '[]');
+      let comp = JSON.parse(localStorage.getItem('onepiece_comprado') || '[]');
+
+      document.querySelectorAll('.lido-ed').forEach(el => ed[el.dataset.id - 1] = el.checked);
+      document.querySelectorAll('.lido-Ju').forEach(el => Ju[el.dataset.id - 1] = el.checked);
+      document.querySelectorAll('.comprado').forEach(el => comp[el.dataset.id - 1] = el.checked);
+
+      localStorage.setItem('onepiece_lido_ed', JSON.stringify(ed));
+      localStorage.setItem('onepiece_lido_ju', JSON.stringify(Ju));
+      localStorage.setItem('onepiece_comprado', JSON.stringify(comp));
+    }
+
     window.onload = () => {
-      fetch('../header.html')
-        .then(res => res.text())
-        .then(data => {
-          document.getElementById('header-container').innerHTML = data;
-          const logo = document.querySelector('#header-container img.logo');
-          const link = document.querySelector('#header-container a.logo-link');
-          if (logo && link) {
-            logo.src = '../assets/logo_corinthians.png';
-            link.href = '../index.html';
-          }
-        });
-
-      setTimeout(() => {
-        const ed = JSON.parse(localStorage.getItem('onepiece_lido_ed') || '[]');
-        const lu = JSON.parse(localStorage.getItem('onepiece_lido_lu') || '[]');
-        const comp = JSON.parse(localStorage.getItem('onepiece_comprado') || '[]');
-
-        document.querySelectorAll('.lido-ed').forEach((c, i) => c.checked = !!ed[i]);
-        document.querySelectorAll('.lido-lu').forEach((c, i) => c.checked = !!lu[i]);
-        document.querySelectorAll('.comprado').forEach((c, i) => c.checked = !!comp[i]);
-
-        updateProgress();
-      }, 100);
+      renderPagina(paginaAtual);
     };
 
-    document.addEventListener('change', updateProgress);
+    document.addEventListener('change', () => {
+      saveCheckboxes();
+      updateProgress();
+    });
   </script>
 </body>
 </html>
