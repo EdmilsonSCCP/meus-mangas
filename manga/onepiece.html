@@ -12,6 +12,25 @@
       padding: 0;
     }
 
+    .site-header {
+      background-color: #000;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    }
+
+    .site-header img.logo {
+      height: 80px;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .site-header img.logo:hover {
+      transform: scale(1.05);
+    }
+
     h2 {
       text-align: center;
       margin-top: 20px;
@@ -111,21 +130,11 @@
   </style>
 </head>
 <body>
-
-  <div style="text-align: center; margin-top: 20px;">
-  <a href="../index.html" style="
-    display: inline-block;
-    background-color: #000;
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s;
-  " onmouseover="this.style.backgroundColor='#333'" onmouseout="this.style.backgroundColor='#000'">
-    ⬅️ Home
-  </a>
-</div>
+  <div class="site-header">
+    <a href="../index.html" class="logo-link">
+      <img src="../assets/logo_corinthians.png" class="logo" alt="Logo Corinthians">
+    </a>
+  </div>
 
   <h2>Capítulos Disponíveis</h2>
 
@@ -160,7 +169,7 @@
           <h4>Capítulo ${i}</h4>
           <div class="checkbox-group">
             <label><input type="checkbox" class="lido-ed" data-id="${i}"> Lido Ed</label>
-            <label><input type="checkbox" class="lido-Ju" data-id="${i}"> Lido Ju</label>
+            <label><input type="checkbox" class="lido-ju" data-id="${i}"> Lido Ju</label>
             <label><input type="checkbox" class="comprado" data-id="${i}"> Comprado</label>
           </div>
         `;
@@ -192,35 +201,35 @@
     function updateProgress() {
       const total = totalCapitulos;
       let ed = JSON.parse(localStorage.getItem('onepiece_lido_ed') || '[]');
-      let Ju = JSON.parse(localStorage.getItem('onepiece_lido_ju') || '[]');
+      let ju = JSON.parse(localStorage.getItem('onepiece_lido_ju') || '[]');
       let comp = JSON.parse(localStorage.getItem('onepiece_comprado') || '[]');
 
       document.getElementById('lidoEdPercent').innerText = `${((ed.filter(Boolean).length / total) * 100).toFixed(2)}%`;
-      document.getElementById('lidoJuPercent').innerText = `${((Ju.filter(Boolean).length / total) * 100).toFixed(2)}%`;
+      document.getElementById('lidoJuPercent').innerText = `${((ju.filter(Boolean).length / total) * 100).toFixed(2)}%`;
       document.getElementById('compradoPercent').innerText = `${((comp.filter(Boolean).length / total) * 100).toFixed(2)}%`;
     }
 
     function restoreCheckboxes() {
       let ed = JSON.parse(localStorage.getItem('onepiece_lido_ed') || '[]');
-      let Ju = JSON.parse(localStorage.getItem('onepiece_lido_ju') || '[]');
+      let ju = JSON.parse(localStorage.getItem('onepiece_lido_ju') || '[]');
       let comp = JSON.parse(localStorage.getItem('onepiece_comprado') || '[]');
 
       document.querySelectorAll('.lido-ed').forEach(el => el.checked = !!ed[el.dataset.id - 1]);
-      document.querySelectorAll('.lido-Ju').forEach(el => el.checked = !!Ju[el.dataset.id - 1]);
+      document.querySelectorAll('.lido-ju').forEach(el => el.checked = !!ju[el.dataset.id - 1]);
       document.querySelectorAll('.comprado').forEach(el => el.checked = !!comp[el.dataset.id - 1]);
     }
 
     function saveCheckboxes() {
       let ed = JSON.parse(localStorage.getItem('onepiece_lido_ed') || '[]');
-      let Ju = JSON.parse(localStorage.getItem('onepiece_lido_ju') || '[]');
+      let ju = JSON.parse(localStorage.getItem('onepiece_lido_ju') || '[]');
       let comp = JSON.parse(localStorage.getItem('onepiece_comprado') || '[]');
 
       document.querySelectorAll('.lido-ed').forEach(el => ed[el.dataset.id - 1] = el.checked);
-      document.querySelectorAll('.lido-Ju').forEach(el => Ju[el.dataset.id - 1] = el.checked);
+      document.querySelectorAll('.lido-ju').forEach(el => ju[el.dataset.id - 1] = el.checked);
       document.querySelectorAll('.comprado').forEach(el => comp[el.dataset.id - 1] = el.checked);
 
       localStorage.setItem('onepiece_lido_ed', JSON.stringify(ed));
-      localStorage.setItem('onepiece_lido_ju', JSON.stringify(Ju));
+      localStorage.setItem('onepiece_lido_ju', JSON.stringify(ju));
       localStorage.setItem('onepiece_comprado', JSON.stringify(comp));
     }
 

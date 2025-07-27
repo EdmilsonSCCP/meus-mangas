@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Entrar - Minha Coleção</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       background: #f4f4f4;
@@ -23,10 +24,11 @@
       width: 100%;
       max-width: 380px;
       text-align: center;
+      box-sizing: border-box;
     }
 
     .login-container img.logo {
-      width: 120px;
+      width: 100px;
       margin-bottom: 20px;
     }
 
@@ -43,6 +45,7 @@
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 15px;
+      box-sizing: border-box;
     }
 
     .login-container button {
@@ -65,6 +68,21 @@
       font-size: 14px;
       margin-top: 10px;
       display: none;
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 30px 20px;
+        margin: 0 15px;
+      }
+
+      .login-container h2 {
+        font-size: 20px;
+      }
+
+      .login-container img.logo {
+        width: 80px;
+      }
     }
   </style>
 </head>
@@ -91,6 +109,13 @@
         error.style.display = "block";
       }
     }
+
+    // Aciona o login ao apertar Enter
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        login();
+      }
+    });
   </script>
 </body>
 </html>

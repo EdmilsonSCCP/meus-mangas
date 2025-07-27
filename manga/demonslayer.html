@@ -102,6 +102,27 @@
       cursor: pointer;
     }
 
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px;
+    }
+
+    .pagination button {
+      padding: 6px 12px;
+      border: 1px solid #000;
+      background: #fff;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .pagination button.active {
+      background: #000;
+      color: #fff;
+    }
+
     footer {
       text-align: center;
       margin: 30px 0;
@@ -110,51 +131,86 @@
   </style>
 </head>
 <body>
-
   <div id="header-container"></div>
-
   <h2>Capítulos Disponíveis</h2>
   <div class="progress-bar">
     <div>Lidos Ed: <span id="lidoEdPercent">0.00%</span></div>
-    <div>Lidos Lu: <span id="lidoLuPercent">0.00%</span></div>
+    <div>Lidos Ju: <span id="lidoJuPercent">0.00%</span></div>
     <div>Comprado: <span id="compradoPercent">0.00%</span></div>
   </div>
 
   <div class="chapters" id="chapters"></div>
+  <div class="pagination" id="pagination"></div>
+
   <footer>KOYOHARU GOTOUGE AUTOR(A)</footer>
 
   <script>
     const totalCapitulos = 23;
-    const container = document.getElementById('chapters');
+    const porPagina = 20;
+    let paginaAtual = 1;
 
-    for (let i = 1; i <= totalCapitulos; i++) {
-      const card = document.createElement('div');
-      card.className = 'chapter-card';
-      card.innerHTML = `
-        <img src="../assets/capas/demonslayer/cap${i}.jpg" alt="Capítulo ${i}">
-        <h4>Capítulo ${i}</h4>
-        <div class="checkbox-group">
-          <label><input type="checkbox" class="lido-ed" data-id="${i}"> Lido Ed</label>
-          <label><input type="checkbox" class="lido-lu" data-id="${i}"> Lido Lu</label>
-          <label><input type="checkbox" class="comprado" data-id="${i}"> Comprado</label>
-        </div>
-      `;
-      container.appendChild(card);
+    const container = document.getElementById('chapters');
+    const paginacao = document.getElementById('pagination');
+
+    function renderCapitulos() {
+      container.innerHTML = '';
+      const inicio = (paginaAtual - 1) * porPagina + 1;
+      const fim = Math.min(paginaAtual * porPagina, totalCapitulos);
+
+      for (let i = inicio; i <= fim; i++) {
+        const card = document.createElement('div');
+        card.className = 'chapter-card';
+        card.innerHTML = `
+          <img src="../assets/capas/demonslayer/cap${i}.jpg" alt="Capítulo ${i}">
+          <h4>Capítulo ${i}</h4>
+          <div class="checkbox-group">
+            <label><input type="checkbox" class="lido-ed" data-id="${i}"> Ed</label>
+            <label><input type="checkbox" class="lido-ju" data-id="${i}"> Ju</label>
+            <label><input type="checkbox" class="comprado" data-id="${i}"> Comprado</label>
+          </div>
+        `;
+        container.appendChild(card);
+      }
+
+      addCheckboxListeners();
+      updateProgress();
     }
 
-    const updateProgress = () => {
-      const lidosEd = document.querySelectorAll('.lido-ed:checked').length;
-      const lidosLu = document.querySelectorAll('.lido-lu:checked').length;
-      const comprados = document.querySelectorAll('.comprado:checked').length;
+    function renderPaginacao() {
+      paginacao.innerHTML = '';
+      const totalPaginas = Math.ceil(totalCapitulos / porPagina);
+      for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement('button');
+        btn.innerText = i;
+        if (i === paginaAtual) btn.classList.add('active');
+        btn.addEventListener('click', () => {
+          paginaAtual = i;
+          renderCapitulos();
+          renderPaginacao();
+        });
+        paginacao.appendChild(btn);
+      }
+    }
 
-      document.getElementById('lidoEdPercent').innerText = `${((lidosEd / totalCapitulos) * 100).toFixed(2)}%`;
-      document.getElementById('lidoLuPercent').innerText = `${((lidosLu / totalCapitulos) * 100).toFixed(2)}%`;
-      document.getElementById('compradoPercent').innerText = `${((comprados / totalCapitulos) * 100).toFixed(2)}%`;
+    function updateProgress() {
+      const ed = document.querySelectorAll('.lido-ed:checked').length;
+      const ju = document.querySelectorAll('.lido-ju:checked').length;
+      const comp = document.querySelectorAll('.comprado:checked').length;
+
+      document.getElementById('lidoEdPercent').innerText = `${((ed / totalCapitulos) * 100).toFixed(2)}%`;
+      document.getElementById('lidoJuPercent').innerText = `${((ju / totalCapitulos) * 100).toFixed(2)}%`;
+      document.getElementById('compradoPercent').innerText = `${((comp / totalCapitulos) * 100).toFixed(2)}%`;
 
       localStorage.setItem('demonslayer_lido_ed', JSON.stringify([...document.querySelectorAll('.lido-ed')].map(c => c.checked)));
-      localStorage.setItem('demonslayer_lido_lu', JSON.stringify([...document.querySelectorAll('.lido-lu')].map(c => c.checked)));
+      localStorage.setItem('demonslayer_lido_ju', JSON.stringify([...document.querySelectorAll('.lido-ju')].map(c => c.checked)));
       localStorage.setItem('demonslayer_comprado', JSON.stringify([...document.querySelectorAll('.comprado')].map(c => c.checked)));
-    };
+    }
+
+    function addCheckboxListeners() {
+      document.querySelectorAll('.lido-ed, .lido-ju, .comprado').forEach(cb => {
+        cb.addEventListener('change', updateProgress);
+      });
+    }
 
     window.onload = () => {
       fetch('../header.html')
@@ -171,18 +227,19 @@
 
       setTimeout(() => {
         const ed = JSON.parse(localStorage.getItem('demonslayer_lido_ed') || '[]');
-        const lu = JSON.parse(localStorage.getItem('demonslayer_lido_lu') || '[]');
+        const ju = JSON.parse(localStorage.getItem('demonslayer_lido_ju') || '[]');
         const comp = JSON.parse(localStorage.getItem('demonslayer_comprado') || '[]');
 
         document.querySelectorAll('.lido-ed').forEach((c, i) => c.checked = !!ed[i]);
-        document.querySelectorAll('.lido-lu').forEach((c, i) => c.checked = !!lu[i]);
+        document.querySelectorAll('.lido-ju').forEach((c, i) => c.checked = !!ju[i]);
         document.querySelectorAll('.comprado').forEach((c, i) => c.checked = !!comp[i]);
 
         updateProgress();
       }, 100);
-    };
 
-    document.addEventListener('change', updateProgress);
+      renderCapitulos();
+      renderPaginacao();
+    };
   </script>
 </body>
 </html>

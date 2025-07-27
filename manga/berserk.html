@@ -12,25 +12,6 @@
       padding: 0;
     }
 
-    .site-header {
-      background-color: #000;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-    }
-
-    .site-header img.logo {
-      height: 80px;
-      transition: transform 0.2s ease;
-      cursor: pointer;
-    }
-
-    .site-header img.logo:hover {
-      transform: scale(1.05);
-    }
-
     h2 {
       text-align: center;
       margin-top: 20px;
@@ -102,6 +83,26 @@
       cursor: pointer;
     }
 
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .pagination button {
+      padding: 8px 14px;
+      border: none;
+      background-color: #000;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .pagination button.active {
+      background-color: #444;
+    }
+
     footer {
       text-align: center;
       margin: 30px 0;
@@ -121,40 +122,91 @@
   </div>
 
   <div class="chapters" id="chapters"></div>
+  <div class="pagination" id="pagination"></div>
 
   <footer>KENTARO MIURA AUTOR</footer>
 
   <script>
     const totalCapitulos = 41;
-    const container = document.getElementById('chapters');
+    const porPagina = 20;
+    let paginaAtual = 1;
 
-    for (let i = 1; i <= totalCapitulos; i++) {
-      const card = document.createElement('div');
-      card.className = 'chapter-card';
-      card.innerHTML = `
-        <img src="../assets/capas/berserk/cap${i}.jpg" alt="Capítulo ${i}">
-        <h4>Capítulo ${i}</h4>
-        <div class="checkbox-group">
-          <label><input type="checkbox" class="lido-ed" data-id="${i}"> Ed</label>
-          <label><input type="checkbox" class="lido-lu" data-id="${i}"> Lu</label>
-          <label><input type="checkbox" class="comprado" data-id="${i}"> Comprado</label>
-        </div>
-      `;
-      container.appendChild(card);
+    function renderPagina(pagina) {
+      const container = document.getElementById('chapters');
+      container.innerHTML = '';
+
+      const inicio = (pagina - 1) * porPagina + 1;
+      const fim = Math.min(inicio + porPagina - 1, totalCapitulos);
+
+      for (let i = inicio; i <= fim; i++) {
+        const card = document.createElement('div');
+        card.className = 'chapter-card';
+        card.innerHTML = `
+          <img src="../assets/capas/berserk/cap${i}.jpg" alt="Capítulo ${i}">
+          <h4>Capítulo ${i}</h4>
+          <div class="checkbox-group">
+            <label><input type="checkbox" class="lido-ed" data-id="${i}"> Ed</label>
+            <label><input type="checkbox" class="lido-lu" data-id="${i}"> Lu</label>
+            <label><input type="checkbox" class="comprado" data-id="${i}"> Comprado</label>
+          </div>
+        `;
+        container.appendChild(card);
+      }
+
+      restoreCheckboxes();
+      updateProgress();
+      renderPaginacao();
+    }
+
+    function renderPaginacao() {
+      const paginacao = document.getElementById('pagination');
+      paginacao.innerHTML = '';
+      const totalPaginas = Math.ceil(totalCapitulos / porPagina);
+
+      for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement('button');
+        btn.innerText = i;
+        if (i === paginaAtual) btn.classList.add('active');
+        btn.onclick = () => {
+          paginaAtual = i;
+          renderPagina(paginaAtual);
+        };
+        paginacao.appendChild(btn);
+      }
     }
 
     function updateProgress() {
-      const edCount = document.querySelectorAll('.lido-ed:checked').length;
-      const luCount = document.querySelectorAll('.lido-lu:checked').length;
-      const compCount = document.querySelectorAll('.comprado:checked').length;
+      let ed = JSON.parse(localStorage.getItem('berserk_lidos_ed') || '[]');
+      let lu = JSON.parse(localStorage.getItem('berserk_lidos_lu') || '[]');
+      let comp = JSON.parse(localStorage.getItem('berserk_comprados') || '[]');
 
-      document.getElementById('lidoEdPercent').innerText = `${((edCount / totalCapitulos) * 100).toFixed(2)}%`;
-      document.getElementById('lidoLuPercent').innerText = `${((luCount / totalCapitulos) * 100).toFixed(2)}%`;
-      document.getElementById('compradoPercent').innerText = `${((compCount / totalCapitulos) * 100).toFixed(2)}%`;
+      document.getElementById('lidoEdPercent').innerText = `${((ed.filter(Boolean).length / totalCapitulos) * 100).toFixed(2)}%`;
+      document.getElementById('lidoLuPercent').innerText = `${((lu.filter(Boolean).length / totalCapitulos) * 100).toFixed(2)}%`;
+      document.getElementById('compradoPercent').innerText = `${((comp.filter(Boolean).length / totalCapitulos) * 100).toFixed(2)}%`;
+    }
 
-      localStorage.setItem('berserk_lidos_ed', JSON.stringify([...document.querySelectorAll('.lido-ed')].map(c => c.checked)));
-      localStorage.setItem('berserk_lidos_lu', JSON.stringify([...document.querySelectorAll('.lido-lu')].map(c => c.checked)));
-      localStorage.setItem('berserk_comprados', JSON.stringify([...document.querySelectorAll('.comprado')].map(c => c.checked)));
+    function restoreCheckboxes() {
+      let ed = JSON.parse(localStorage.getItem('berserk_lidos_ed') || '[]');
+      let lu = JSON.parse(localStorage.getItem('berserk_lidos_lu') || '[]');
+      let comp = JSON.parse(localStorage.getItem('berserk_comprados') || '[]');
+
+      document.querySelectorAll('.lido-ed').forEach(el => el.checked = !!ed[el.dataset.id - 1]);
+      document.querySelectorAll('.lido-lu').forEach(el => el.checked = !!lu[el.dataset.id - 1]);
+      document.querySelectorAll('.comprado').forEach(el => el.checked = !!comp[el.dataset.id - 1]);
+    }
+
+    function saveCheckboxes() {
+      let ed = JSON.parse(localStorage.getItem('berserk_lidos_ed') || '[]');
+      let lu = JSON.parse(localStorage.getItem('berserk_lidos_lu') || '[]');
+      let comp = JSON.parse(localStorage.getItem('berserk_comprados') || '[]');
+
+      document.querySelectorAll('.lido-ed').forEach(el => ed[el.dataset.id - 1] = el.checked);
+      document.querySelectorAll('.lido-lu').forEach(el => lu[el.dataset.id - 1] = el.checked);
+      document.querySelectorAll('.comprado').forEach(el => comp[el.dataset.id - 1] = el.checked);
+
+      localStorage.setItem('berserk_lidos_ed', JSON.stringify(ed));
+      localStorage.setItem('berserk_lidos_lu', JSON.stringify(lu));
+      localStorage.setItem('berserk_comprados', JSON.stringify(comp));
     }
 
     window.onload = () => {
@@ -171,20 +223,13 @@
           }
         });
 
-      setTimeout(() => {
-        const lidosEd = JSON.parse(localStorage.getItem('berserk_lidos_ed') || '[]');
-        const lidosLu = JSON.parse(localStorage.getItem('berserk_lidos_lu') || '[]');
-        const comprados = JSON.parse(localStorage.getItem('berserk_comprados') || '[]');
-
-        document.querySelectorAll('.lido-ed').forEach((el, i) => el.checked = !!lidosEd[i]);
-        document.querySelectorAll('.lido-lu').forEach((el, i) => el.checked = !!lidosLu[i]);
-        document.querySelectorAll('.comprado').forEach((el, i) => el.checked = !!comprados[i]);
-
-        updateProgress();
-      }, 50);
+      renderPagina(paginaAtual);
     };
 
-    document.addEventListener('change', updateProgress);
+    document.addEventListener('change', () => {
+      saveCheckboxes();
+      updateProgress();
+    });
   </script>
 </body>
 </html>
